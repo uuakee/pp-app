@@ -63,13 +63,12 @@ export default function Home() {
         throw new Error(data.message || 'Credenciais inválidas');
       }
 
-      // Armazena o token se a API retornar
       if (data.token) {
         localStorage.setItem('token', data.token);
+        localStorage.setItem('id', data.id);
       }
 
-      // Redireciona para /realease
-      router.push('/realease');
+      router.push('/dashboard');
 
     } catch (error: any) {
       toast({
