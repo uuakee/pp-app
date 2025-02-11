@@ -5,6 +5,7 @@ import { Oswald } from 'next/font/google';
 import { useEffect, useState } from 'react';
 import Head from 'next/head'
 import { useToast } from "@/hooks/use-toast";
+import { withAuth } from '@/components/auth/protected-route';
 
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
@@ -38,7 +39,7 @@ interface Plan {
     status: boolean;
 }
 
-export default function Dashboard() {
+function Dashboard() {
     const [balances, setBalances] = useState({
         balance: 0,
         withdrawal_balance: 0
@@ -297,3 +298,5 @@ export default function Dashboard() {
         </>
     )
 }
+
+export default withAuth(Dashboard);

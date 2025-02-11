@@ -5,6 +5,7 @@ import { ArrowLeft, Timer } from "lucide-react";
 import { Oswald } from "next/font/google";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { withAuth } from '@/components/auth/protected-route';
 
 interface Investment {
     id: number;
@@ -30,7 +31,7 @@ const oswald = Oswald({
     subsets: ['latin'],
 });
 
-export default function Investments() {
+function Investments() {
     const [investments, setInvestments] = useState<Investment[]>([]);
     
 
@@ -140,3 +141,5 @@ export default function Investments() {
         </div>
     );
 }
+
+export default withAuth(Investments);

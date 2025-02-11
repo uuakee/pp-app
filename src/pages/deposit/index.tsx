@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { CardContent, CardDescription, CardNoShadow, CardTitle } from "@/components/ui/card";
 import { Oswald } from "next/font/google";
 import { useState } from "react";
+import { withAuth } from '@/components/auth/protected-route';
 
 const oswald = Oswald({
     weight: "700",
@@ -22,7 +23,7 @@ const presetValues = [
     { value: 400, label: 'R$ 400' },
 ];
 
-export default function Deposit() {
+function Deposit() {
     const [selectedValue, setSelectedValue] = useState<number>(0);
     const [customValue, setCustomValue] = useState<string>('');
 
@@ -112,3 +113,5 @@ export default function Deposit() {
         </div>
     );
 }
+
+export default withAuth(Deposit);

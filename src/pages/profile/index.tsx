@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 import { Oswald } from "next/font/google";
 import { CardContent, CardDescription, CardNoShadow, CardTitle } from "@/components/ui/card";
+import { withAuth } from '@/components/auth/protected-route';
 
 const oswald = Oswald({
     weight: "700",
@@ -35,7 +36,7 @@ const formatPhoneNumber = (phone: string) => {
     return cleanNumber.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
 };
 
-export default function Profile() {
+function Profile() {
     const [user, setUser] = useState<User>({
         phone: '',
         balance: 0,
@@ -212,3 +213,5 @@ export default function Profile() {
         </div>
     );
 }
+
+export default withAuth(Profile);
