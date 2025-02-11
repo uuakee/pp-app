@@ -42,8 +42,9 @@ export default function Home() {
     try {
       setLoading(true);
       
-      // Remove caracteres não numéricos do telefone
+      // Remove caracteres não numéricos e o prefixo 55 se existir
       const cleanPhone = phone.replace(/\D/g, "");
+      const formattedPhone = cleanPhone.startsWith('55') ? cleanPhone.slice(2) : cleanPhone;
 
       const response = await fetch(`https://api.epiroc.lat/api/user/login`, {
         method: 'POST',
@@ -51,7 +52,7 @@ export default function Home() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          phone: cleanPhone,
+          phone: formattedPhone,
           password: password,
         }),
       });
