@@ -85,7 +85,7 @@ export default function Register() {
         payload.invited_by = invitedBy;
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/register`, {
+      const response = await fetch(`https://api.epiroc.lat/api/user/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -45,7 +45,7 @@ export default function Home() {
       // Remove caracteres não numéricos do telefone
       const cleanPhone = phone.replace(/\D/g, "");
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/login`, {
+      const response = await fetch(`https://api.epiroc.lat/api/user/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
