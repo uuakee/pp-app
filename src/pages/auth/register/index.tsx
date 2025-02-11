@@ -68,15 +68,16 @@ export default function Register() {
       return;
     }
 
-    // Remove caracteres não numéricos do telefone
+    // Remove caracteres não numéricos e o prefixo 55 se existir
     const cleanPhone = phone.replace(/\D/g, "");
+    const formattedPhone = cleanPhone.startsWith('55') ? cleanPhone.slice(2) : cleanPhone;
 
     try {
       setLoading(true);
       
       // Monta o payload
       const payload: any = {
-        phone: cleanPhone,
+        phone: formattedPhone,
         password: password,
       };
 
