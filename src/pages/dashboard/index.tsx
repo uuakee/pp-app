@@ -233,16 +233,13 @@ function Dashboard() {
                         </div>
                     </CardNoShadow>
                     <div className="flex flex-col gap-2">
-                        <Button className="w-full bg-brand">
-                            <a href="/deposit" className="flex items-center gap-2">
+                        <Button className="w-full bg-brand" onClick={() => window.location.href = '/deposit'}>
+                            
                                 <PlusCircle className="w-4 h-4" />
                                 Depositar
-                            </a>
                         </Button>
-                        <Button variant="outline" className="w-full">
-                            <a href="/withdrawal">
-                                Sacar
-                            </a>
+                        <Button variant="outline" className="w-full" onClick={() => window.location.href = '/withdrawal'}>
+                            Sacar
                         </Button>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Button } from "@/components/ui/button"
 import {
@@ -15,12 +15,18 @@ import { ShieldX } from 'lucide-react'
 
 export default function AdminLogin() {
   const router = useRouter()
+  const [mounted, setMounted] = useState(false)
   const [credentials, setCredentials] = useState({
     phone: '',
     password: ''
   })
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+
+  // Evita problemas de hidratação renderizando apenas no cliente
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const formatPhoneNumber = (phone: string) => {
     // Remove todos os caracteres não numéricos
@@ -52,6 +58,8 @@ export default function AdminLogin() {
 
       if (response.ok) {
         if (data.user.is_admin) {
+          localStorage.setItem('token', data.token)
+          localStorage.setItem('id', data.id)
           router.push('/admin/dashboard')
         } else {
           setError('Acesso negado. Você não tem permissões de administrador.')
@@ -64,6 +72,10 @@ export default function AdminLogin() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  if (!mounted) {
+    return null // ou um loading placeholder
   }
 
   return (
@@ -79,7 +91,7 @@ export default function AdminLogin() {
         </CardHeader>
         <CardContent>
           {error && (
-            <Alert variant="destructive" className="mb-4 flex items-center">
+            <Alert variant="destructive" className="mb-4">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}

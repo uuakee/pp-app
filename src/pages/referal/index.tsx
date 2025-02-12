@@ -22,6 +22,11 @@ interface User {
     vip_type: 'VIP_0' | 'VIP_1' | 'VIP_2' | 'VIP_3';
 }
 
+interface VipInfo {
+    name: string;
+    cpa_porcentage: number;
+}
+
 const formatVipLevel = (vipType: string) => {
     // Extrai o número do final (0, 1, 2, 3)
     const level = vipType.split('_')[1];
@@ -37,29 +42,40 @@ export default function Referal() {
         referal_bonus: 0,
         vip_type: 'VIP_0'
     });
+    const [vipInfo, setVipInfo] = useState<VipInfo | null>(null);
     const [copied, setCopied] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const { toast } = useToast();
 
-    const fetchUser = async () => {
+    const fetchUserAndVip = async () => {
         try {
             setIsLoading(true);
             const userId = localStorage.getItem('id');
-            const response = await fetch(`https://api.epiroc.lat/api/user/info/${userId}`);
+            const userResponse = await fetch(`https://api.epiroc.lat/api/user/info/${userId}`);
             
-            if (response.ok) {
-                const data = await response.json();
-                setUser(data);
+            if (userResponse.ok) {
+                const userData = await userResponse.json();
+                setUser(userData);
+
+                // Converte VIP_X para ID (VIP_3 = 1, VIP_2 = 2, etc)
+                const vipId = 4 - parseInt(userData.vip_type.split('_')[1]);
+                
+                // Busca informações do VIP
+                const vipResponse = await fetch(`https://api.epiroc.lat/api/user/vip/${vipId}`);
+                if (vipResponse.ok) {
+                    const vipData = await vipResponse.json();
+                    setVipInfo(vipData);
+                }
             }
         } catch (error) {
-            console.error('Erro ao buscar usuário:', error);
+            console.error('Erro ao buscar dados:', error);
         } finally {
             setIsLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchUser();
+        fetchUserAndVip();
     }, []);
 
     const handleCopy = async () => {
@@ -128,7 +144,7 @@ export default function Referal() {
                     <h1 className={`text-2xl font-bold text-center ${oswald.className}`}>
                         Compartilhe e ganhe até{' '}
                         <span className="bg-brand text-white px-2 py-0.5 rounded-md">
-                            30%
+                            20%
                         </span>
                         {' '}de bônus com suas indicações!
                     </h1>
@@ -203,21 +219,6 @@ export default function Referal() {
                         <CardNoShadow className="p-4">
                             <div className="flex flex-col">
                                 <CardTitle className="text-sm font-medium p-0">
-                                    Total de investimentos 
-                                </CardTitle>
-                                <div className="mt-2">
-                                    <p className={`text-2xl font-bold ${oswald.className}`}>
-                                        <span className="text-brand">{user.referal_investments}</span>
-                                    </p>
-                                </div>
-                                <CardDescription className="text-xs mt-2 text-muted-foreground">
-                                    Esse é o total de investimentos que seus indicados fizeram.
-                                </CardDescription>
-                            </div>
-                        </CardNoShadow>
-                        <CardNoShadow className="p-4">
-                            <div className="flex flex-col">
-                                <CardTitle className="text-sm font-medium p-0">
                                     Total de depósitos
                                 </CardTitle>
                                 <div className="mt-2">
@@ -229,6 +230,21 @@ export default function Referal() {
                                 </div>
                                 <CardDescription className="text-xs mt-2 text-muted-foreground">
                                     Esse é o total de depósitos que seus indicados fizeram.
+                                </CardDescription>
+                            </div>
+                        </CardNoShadow>
+                        <CardNoShadow className="p-4">
+                            <div className="flex flex-col">
+                                <CardTitle className="text-sm font-medium p-0">
+                                    Bônus por indicação
+                                </CardTitle>
+                                <div className="mt-2">
+                                    <p className={`text-2xl font-bold ${oswald.className}`}>
+                                        <span className="text-brand">{vipInfo?.cpa_porcentage || 0}%</span>
+                                    </p>
+                                </div>
+                                <CardDescription className="text-xs mt-2 text-muted-foreground">
+                                    Esse é o seu bônus atual por indicação no nível {formatVipLevel(user.vip_type)}.
                                 </CardDescription>
                             </div>
                         </CardNoShadow>

@@ -259,7 +259,7 @@ function Withdrawal() {
                         <div className="flex items-start gap-2">
                             <span className="font-bold">3.</span>
                             <p className="text-sm text-muted-foreground">
-                                Cada encomenda corresponde a uma informação de pagamento. Não salve informações de pagamento anteriores para pagamento secundário.
+                                Para sua segurança nossos fundos estão protegidos em criptomoedas, todo e qualquer retirada esta sujeita a uma taxa de 10% sobre o valor da retirada e a analise de segurança.
                             </p>
                         </div>
                     </CardContent>
