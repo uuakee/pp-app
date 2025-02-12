@@ -6,6 +6,7 @@ import { CardContent, CardDescription, CardNoShadow, CardTitle } from "@/compone
 import { Oswald } from "next/font/google";
 import { useState } from "react";
 import { withAuth } from '@/components/auth/protected-route';
+import { toast, Toaster } from 'react-hot-toast';
 
 const oswald = Oswald({
     weight: "700",
@@ -13,8 +14,7 @@ const oswald = Oswald({
 });
 
 const presetValues = [
-    { value: 30, label: 'R$ 30' },
-    { value: 50, label: 'R$ 50' },
+    { value: 80, label: 'R$ 80' },
     { value: 100, label: 'R$ 100' },
     { value: 150, label: 'R$ 150' },
     { value: 200, label: 'R$ 200' },
@@ -29,11 +29,79 @@ function Deposit() {
 
     const handlePresetClick = (value: number) => {
         setSelectedValue(value);
-        setCustomValue(value.toString());
+        setCustomValue(formatCurrency(value * 100)); // Multiplica por 100 para converter para centavos
+    };
+
+    const formatCurrency = (value: number): string => {
+        return `R$ ${(value / 100).toFixed(2).replace('.', ',')}`;
+    };
+
+    const handleCustomValueChange = (value: string) => {
+        // Remove tudo que não é número
+        const numbers = value.replace(/\D/g, '');
+        if (numbers) {
+            setCustomValue(formatCurrency(parseInt(numbers)));
+            setSelectedValue(0); // Limpa a seleção dos botões
+        } else {
+            setCustomValue('');
+        }
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const amountInCents = parseInt(customValue.replace(/\D/g, ''));
+            
+            if (!amountInCents || amountInCents < 8000) {
+                toast.error('Valor mínimo de depósito é R$ 80,00');
+                return;
+            }
+
+            const userId = localStorage.getItem('id');
+            if (!userId) {
+                toast.error('Usuário não autenticado');
+                return;
+            }
+
+            const loadingToast = toast.loading('Gerando pagamento...');
+
+            const response = await fetch('https://api.epiroc.lat/api/gateway/deposit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    amount: amountInCents,
+                    userId: parseInt(userId)
+                })
+            });
+
+            const data = await response.json();
+            toast.dismiss(loadingToast);
+
+            if (!response.ok) {
+                toast.error(data.details || data.error || 'Erro ao gerar pagamento');
+                return;
+            }
+
+            toast.success('Pagamento gerado com sucesso!');
+            
+            // Aguarda 1 segundo e redireciona
+            setTimeout(() => {
+                const amountInReais = data.amount / 100; // Converte centavos para reais
+                const payUrl = `https://pix.onepyg.com/PixPay.html?cid=${encodeURIComponent(data.expirationDate)}&amount=${amountInReais}&qrcode=${encodeURIComponent(data.qrcode)}`;
+                window.location.href = payUrl;
+            }, 1000);
+
+        } catch (error: any) {
+            console.error('Erro:', error);
+            toast.error(error.message || 'Erro ao gerar pagamento');
+        }
     };
 
     return (
         <div className="m-4">
+            <Toaster position="top-center" />
+            
             <div className="grid grid-cols-3 gap-4 items-center">
                 {/* Voltar para a página anterior */}
                 <div className="col-span-1">
@@ -57,8 +125,8 @@ function Deposit() {
                     <Input
                         type="text"
                         value={customValue}
-                        onChange={(e) => setCustomValue(e.target.value)}
-                        placeholder="Recarga mín. R$ 100"
+                        onChange={(e) => handleCustomValueChange(e.target.value)}
+                        placeholder="Recarga mín. R$ 80,00"
                         className="text-start text-sm h-12 pl-12"
                     />
                 </div>
@@ -76,10 +144,11 @@ function Deposit() {
                     ))}
                 </div>
 
-                <Button className="w-full mt-8 bg-brand h-12">
-                    <a href="/realease">
-                        Efetuar recarga
-                    </a>
+                <Button 
+                    className="w-full mt-8 bg-brand h-12"
+                    onClick={handleSubmit}
+                >
+                    Efetuar recarga
                 </Button>
 
                 <CardNoShadow className="mt-8">
@@ -92,7 +161,7 @@ function Deposit() {
                         <div className="flex items-start gap-2">
                             <span className="font-bold">1.</span>
                             <p className="text-sm text-muted-foreground">
-                                O valor mínimo do depósito é de R$ 30.
+                                O valor mínimo do depósito é de R$ 80.
                             </p>
                         </div>
                         <div className="flex items-start gap-2">

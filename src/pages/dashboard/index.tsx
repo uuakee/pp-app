@@ -234,11 +234,15 @@ function Dashboard() {
                     </CardNoShadow>
                     <div className="flex flex-col gap-2">
                         <Button className="w-full bg-brand">
-                            <PlusCircle className="w-4 h-4" />
-                            Depositar
+                            <a href="/deposit" className="flex items-center gap-2">
+                                <PlusCircle className="w-4 h-4" />
+                                Depositar
+                            </a>
                         </Button>
                         <Button variant="outline" className="w-full">
-                            Sacar
+                            <a href="/withdrawal">
+                                Sacar
+                            </a>
                         </Button>
                     </div>
                 </div>

@@ -7,7 +7,7 @@ import { InputMask } from '@react-input/mask';
 import { Phone, Lock } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useToast } from "@/hooks/use-toast";
+import { toast, Toaster } from 'react-hot-toast';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,24 +25,18 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   
   const router = useRouter();
-  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!phone || !password) {
-      toast({
-        variant: "destructive",
-        title: "Erro no login",
-        description: "Por favor, preencha todos os campos.",
-      });
+      toast.error('Por favor, preencha todos os campos.');
       return;
     }
 
     try {
       setLoading(true);
       
-      // Remove caracteres não numéricos e o prefixo 55 se existir
       const cleanPhone = phone.replace(/\D/g, "");
       const formattedPhone = cleanPhone.startsWith('55') ? cleanPhone.slice(2) : cleanPhone;
 
@@ -66,16 +60,15 @@ export default function Home() {
       if (data.token) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('id', data.id);
+        toast.success('Login realizado com sucesso!');
+        
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 1000);
       }
 
-      router.push('/dashboard');
-
     } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Erro no login",
-        description: error.message || "Ocorreu um erro ao fazer login.",
-      });
+      toast.error(error.message || "Ocorreu um erro ao fazer login.");
     } finally {
       setLoading(false);
     }
@@ -91,6 +84,7 @@ export default function Home() {
         backgroundSize: "20px 20px"
       }}
     >
+      <Toaster position="top-center" />
       <div className="flex items-center justify-center min-h-screen scroll-none">
         <Card className="p-6 w-[380px]">
           <CardTitle className="space-y-4">

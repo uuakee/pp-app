@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { Oswald } from "next/font/google";
 import { CardContent, CardDescription, CardNoShadow, CardTitle } from "@/components/ui/card";
 import { withAuth } from '@/components/auth/protected-route';
+import DialogResetPassword from "@/components/common/dialog-resetpassword";
 
 const oswald = Oswald({
     weight: "700",
@@ -43,6 +44,7 @@ function Profile() {
         vip_type: 'VIP_0'
     });
     const [isLoading, setIsLoading] = useState(true);
+    const [isResetPasswordOpen, setIsResetPasswordOpen] = useState(false);
 
     const fetchUser = async () => {
         try {
@@ -65,8 +67,23 @@ function Profile() {
         fetchUser();
     }, []);
 
+    const handleLogout = () => {
+        // Remove os dados do localStorage
+        localStorage.removeItem('token');
+        localStorage.removeItem('id');
+        
+        // Redireciona para a página inicial
+        window.location.href = '/';
+    };
+
     return (
         <div className="m-4">
+            {/* Dialog de Reset de Senha */}
+            <DialogResetPassword 
+                isOpen={isResetPasswordOpen} 
+                onClose={() => setIsResetPasswordOpen(false)} 
+            />
+
             <div className="grid grid-cols-3 gap-4 items-center">
                 {/* Voltar para a página anterior */}
                 <div className="col-span-1">
@@ -122,7 +139,7 @@ function Profile() {
                     </div>
                     <div className="col-span-1 flex flex-col items-center gap-1">
                         <Button className="flex flex-col p-4 bg-slate-600">
-                            <a href="/realease">
+                            <a href="/withdrawal">
                                 <ArrowDown className="w-5 h-5" />
                             </a>
                         </Button>
@@ -132,7 +149,7 @@ function Profile() {
                     </div>
                     <div className="col-span-1 flex flex-col items-center gap-1">
                         <Button className="flex flex-col p-4 bg-blue-600">
-                            <a href="/realease">
+                            <a href="http://t.me/epirocglobal">
                                 <MessageCircle className="w-5 h-5" />
                             </a>
                         </Button>
@@ -142,7 +159,7 @@ function Profile() {
                     </div>
                     <div className="col-span-1 flex flex-col items-center gap-1">
                         <Button className="flex flex-col p-4 bg-green-500">
-                            <a href="/realease">
+                            <a href="/about-us">
                                 <Info className="w-5 h-5" />
                             </a>
                         </Button>
@@ -159,31 +176,28 @@ function Profile() {
                             </h1>
                         </CardTitle>
                         <CardContent className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2 border border-slate-200 p-2 rounded-md">
-                                <div className="w-fit gap-2 bg-brand p-2 rounded-md">
-                                    <Wallet className="w-5 h-5 text-[#b28a1a]" />
-                                </div>
-                                <p className="text-sm text-muted-foreground">
-                                    Carteira
-                                </p>
-                            </div>
-                        <div className="flex items-center gap-2 border border-slate-200 p-2 rounded-md">
+                        <div className="flex items-center gap-2 border border-slate-200 p-2 rounded-md">                          
                                 <div className="w-fit gap-2 bg-brand p-2 rounded-md">
                                     <DollarSign className="w-5 h-5 text-[#b28a1a]" />
                                 </div>
-                                <p className="text-sm text-muted-foreground">
-                                    Registro de depósitos
-                                </p>
+                                <a href="/deposits">
+                                    <p className="text-sm text-muted-foreground">
+                                        Registro de depósitos
+                                    </p>
+                                </a>        
                             </div>
                             <div className="flex items-center gap-2 border border-slate-200 p-2 rounded-md">
                                 <div className="w-fit gap-2 bg-brand p-2 rounded-md">
                                     <ArrowDown className="w-5 h-5 text-[#b28a1a]" />
                                 </div>
-                                <p className="text-sm text-muted-foreground">
-                                    Registro de saques
-                                </p>
+                                <a href="/withdrawals">
+                                    <p className="text-sm text-muted-foreground">
+                                        Registro de retiradas
+                                    </p>
+                                </a>  
                             </div>
-                            <div className="flex items-center gap-2 border border-slate-200 p-2 rounded-md">
+                            <div className="flex items-center gap-2 border border-slate-200 p-2 rounded-md cursor-pointer"
+                                 onClick={() => setIsResetPasswordOpen(true)}>
                                 <div className="w-fit gap-2 bg-brand p-2 rounded-md">
                                     <Lock className="w-5 h-5 text-[#b28a1a]" />
                                 </div>
@@ -191,7 +205,8 @@ function Profile() {
                                     Alterar senha
                                 </p>
                             </div>
-                            <div className="flex items-center gap-2 border border-slate-200 p-2 rounded-md">
+                            <div className="flex items-center gap-2 border border-slate-200 p-2 rounded-md cursor-pointer"
+                                 onClick={handleLogout}>
                                 <div className="w-fit gap-2 bg-red-500 p-2 rounded-md">
                                     <LogOut className="w-5 h-5 text-red-700" />
                                 </div>  

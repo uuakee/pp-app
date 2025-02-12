@@ -74,11 +74,9 @@ function Investments() {
                     <Image src="/logotype.svg" alt="Epiroc Global" width={120} height={40} />
                 </div>
                 <div className="col-span-1 flex justify-end">
-                    <a href="/payments">
-                        <Badge variant="outline">
-                            Registros
-                        </Badge>
-                    </a>
+                    <p className="text-sm text-muted-foreground">
+                        Investimentos
+                    </p>
                 </div>
             </div>
 

@@ -166,7 +166,7 @@ export default function Referal() {
                     <div className="grid grid-cols-2 gap-4 mb-20">
                         <CardNoShadow className="p-4">
                             <div className="flex flex-col">
-                                <CardTitle className="text-sm font-medium">
+                                <CardTitle className="text-sm font-medium p-0">
                                     Membros convidados
                                 </CardTitle>
                                 <div className="mt-2">
@@ -185,7 +185,7 @@ export default function Referal() {
 
                         <CardNoShadow className="p-4">
                             <div className="flex flex-col">
-                                <CardTitle className="text-sm font-medium">
+                                <CardTitle className="text-sm font-medium p-0">
                                     Total de bônus
                                 </CardTitle>
                                 <div className="mt-2">
@@ -202,7 +202,7 @@ export default function Referal() {
                         </CardNoShadow>
                         <CardNoShadow className="p-4">
                             <div className="flex flex-col">
-                                <CardTitle className="text-sm font-medium">
+                                <CardTitle className="text-sm font-medium p-0">
                                     Total de investimentos 
                                 </CardTitle>
                                 <div className="mt-2">
@@ -217,7 +217,7 @@ export default function Referal() {
                         </CardNoShadow>
                         <CardNoShadow className="p-4">
                             <div className="flex flex-col">
-                                <CardTitle className="text-sm font-medium">
+                                <CardTitle className="text-sm font-medium p-0">
                                     Total de depósitos
                                 </CardTitle>
                                 <div className="mt-2">
