@@ -3,9 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Card, CardContent, CardDescription, CardFooter, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { InputMask } from '@react-input/mask';
 import { Phone, Lock } from "lucide-react";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast, Toaster } from 'react-hot-toast';
 
@@ -25,6 +24,30 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   
   const router = useRouter();
+
+  // Função para formatar o número de telefone
+  const formatPhoneNumber = (value: string) => {
+    // Remove tudo que não é número
+    const numbers = value.replace(/\D/g, '');
+    
+    // Se começar com 55, remove
+    const cleanNumber = numbers.startsWith('55') ? numbers.slice(2) : numbers;
+    
+    // Formata o número no padrão +55 (XX) XXXXX-XXXX
+    if (cleanNumber.length === 11) {
+      return `+55 (${cleanNumber.slice(0, 2)}) ${cleanNumber.slice(2, 7)}-${cleanNumber.slice(7)}`;
+    }
+    
+    return value;
+  };
+
+  // Efeito para formatar o número quando o componente montar
+  useEffect(() => {
+    const savedPhone = localStorage.getItem('phone');
+    if (savedPhone) {
+      setPhone(formatPhoneNumber(savedPhone));
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,6 +83,7 @@ export default function Home() {
       if (data.token) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('id', data.id);
+        localStorage.setItem('phone', formattedPhone); // Salva o número formatado
         toast.success('Login realizado com sucesso!');
         
         setTimeout(() => {
@@ -108,13 +132,10 @@ export default function Home() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="relative">
                 <Phone className="absolute left-3 top-2.5 h-4 w-4 text-brand" />
-                <InputMask 
-                  component={Input}
-                  mask="+55 (__) _____-____"
-                  replacement={{ _: /\d/ }}
+                <Input 
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Número de celular"
+                  placeholder="Número de celular (Apenas DDD+Número)"
                   className="pl-10 text-sm"
                 />
               </div>

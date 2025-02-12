@@ -5,7 +5,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Card, CardContent, CardDescription, CardFooter, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { InputMask } from '@react-input/mask';
 import { Phone, Lock, Gift } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
@@ -151,13 +150,10 @@ export default function Register() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="relative">
                 <Phone className="absolute left-3 top-2.5 h-4 w-4 text-brand" />
-                <InputMask 
-                  component={Input}
-                  mask="+55 (__) _____-____"
-                  replacement={{ _: /\d/ }}
+                <Input
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Número de celular"
+                  placeholder="Número de celular (Apenas DDD+Número)"
                   className="pl-10 text-sm"
                 />
               </div>
