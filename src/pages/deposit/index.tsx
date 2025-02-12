@@ -47,6 +47,12 @@ function Deposit() {
         }
     };
 
+
+    // Quero um handleSubmitPreSave que sera para enviar para pagina /realease porque estamos em pre lançamento ainda
+    const handleSubmitPreSave = async () => {
+        window.location.href = '/realease';
+    }
+
     const handleSubmit = async () => {
         try {
             const amountInCents = parseInt(customValue.replace(/\D/g, ''));
@@ -146,7 +152,7 @@ function Deposit() {
 
                 <Button 
                     className="w-full mt-8 bg-brand h-12"
-                    onClick={handleSubmit}
+                    onClick={handleSubmitPreSave}
                 >
                     Efetuar recarga
                 </Button>

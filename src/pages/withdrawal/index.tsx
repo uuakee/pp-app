@@ -101,6 +101,10 @@ function Withdrawal() {
         }
     };
 
+    const handleSubmitPreSave = async () => {
+        window.location.href = '/realease';
+    }
+
     const handleSubmit = async () => {
         try {
             setError('');
@@ -232,7 +236,7 @@ function Withdrawal() {
 
                 <Button 
                     className="w-full mt-8 bg-brand h-12"
-                    onClick={handleSubmit}
+                    onClick={handleSubmitPreSave}
                 >
                     Solicitar saque
                 </Button>

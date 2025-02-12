@@ -234,7 +234,6 @@ function Dashboard() {
                     </CardNoShadow>
                     <div className="flex flex-col gap-2">
                         <Button className="w-full bg-brand" onClick={() => window.location.href = '/deposit'}>
-                            
                                 <PlusCircle className="w-4 h-4" />
                                 Depositar
                         </Button>
