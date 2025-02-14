@@ -24,7 +24,7 @@ export default function Release() {
             <div className="flex gap-4 items-center">
                 <Badge variant="outline" className="bg-slate-500 text-white h-7">
                     <Calendar className="w-4 h-4 mr-2" />
-                    Pre lançamento: 14/02/2025
+                    Lançamento: 17/02/2025
                 </Badge>
             </div>
         </div>
