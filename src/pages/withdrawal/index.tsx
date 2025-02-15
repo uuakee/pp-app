@@ -263,7 +263,7 @@ function Withdrawal() {
                         <div className="flex items-start gap-2">
                             <span className="font-bold">3.</span>
                             <p className="text-sm text-muted-foreground">
-                                Para sua segurança nossos fundos estão protegidos em criptomoedas, todo e qualquer retirada esta sujeita a uma taxa de 10% sobre o valor da retirada e a analise de segurança.
+                                Para sua segurança nossos fundos estão protegidos em criptomoedas, todo e qualquer retirada esta sujeita a uma taxa de 3% sobre o valor da retirada e a analise de segurança.
                             </p>
                         </div>
                     </CardContent>

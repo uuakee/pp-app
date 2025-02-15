@@ -86,10 +86,7 @@ function Dashboard() {
     useEffect(() => {
         fetchBalances();
         fetchPlans();
-        // Atualiza a cada 30 segundos
-        const interval = setInterval(fetchBalances, 30000);
-        return () => clearInterval(interval);
-    }, [])
+    }, []);
 
     const handleRefresh = async () => {
         setIsRefreshing(true);
