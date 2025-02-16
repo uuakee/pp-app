@@ -152,7 +152,7 @@ function Deposit() {
 
                 <Button 
                     className="w-full mt-8 bg-brand h-12"
-                    onClick={handleSubmit}
+                    onClick={handleSubmitPreSave}
                 >
                     Efetuar recarga
                 </Button>
